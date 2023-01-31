@@ -5,6 +5,10 @@ executors:
   python:
     docker:
       - image: cimg/python:3.10
+  python_large:
+    docker:
+      - image: cimg/python:3.9
+    resource_class: large
   publisher:
     docker:
       - image: quay.io/cloudalchemy/publisher:latest
@@ -15,12 +19,12 @@ jobs:
     steps:
       - checkout
       - run: pip install ansible ansible-lint yamllint flake8
-      - run: ansible-lint
+      - run: ansible-lint .
       - run: yamllint .
       - run: flake8
 
   test:
-    executor: python
+    executor: python_large
     parameters:
       ansible:
         type: string
